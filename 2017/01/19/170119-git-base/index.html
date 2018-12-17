@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          git基本操作 - leven的博客
+        
+    </title>
+
+    <link rel="canonical" href="https://blog.leven.xyz/2017/01/19/170119-git-base/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">leven&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="https://blog.leven.xyz/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#git" title="git">git</a>
+                        
+                          <a class="tag" href="/tags/#cvs" title="cvs">cvs</a>
+                        
+                    </div>
+                    <h1>git基本操作</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by leven on
+                        2017-01-19
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="git基本操作"><a href="#git基本操作" class="headerlink" title="git基本操作"></a>git基本操作</h1><hr>
+<h2 id="版本控制系统发展"><a href="#版本控制系统发展" class="headerlink" title="版本控制系统发展"></a>版本控制系统发展</h2><ol>
+<li><p>本地版本控制系统：通过简单的数据库记录文件的历次更新差异(文件补丁)</p>
+</li>
+<li><p>集中化的版本控制系统（CVCS）：为了满足不同系统的开发者进行协作，出现集中化的VCS,通过一个集中管理的服务器，保存所有版本的修订版本，但由于服务单点，一旦中央服务出现宕机的情况，或者数据损坏，丢失数据的风险很大</p>
+</li>
+<li><p>分布式版本控制（DVCS）:客户端在与服务端更新的时候，不只提取最新版本的文件快照，而且还把代码仓库镜像下来，所以一旦服务器丢失文件数据，可以用任何一个镜像的本地仓库来恢复</p>
+</li>
+</ol>
+<hr>
+<h2 id="git特性"><a href="#git特性" class="headerlink" title="git特性"></a>git特性</h2><ol>
+<li><p>直接记录快照，每一个版本都一个对应的快照</p>
+</li>
+<li><p>几乎所有操作都是本地操作</p>
+</li>
+<li><p>三个工作区域：工作目录（workinging tree），暂存区域(cached area)，以及本地仓库(repository)。下图就可以知道他们的交互：</p>
+<p> <img src="http://cdn.htt.red/1.png" alt=""></p>
+</li>
+</ol>
+<hr>
+<h2 id="git配置"><a href="#git配置" class="headerlink" title="git配置"></a>git配置</h2><ul>
+<li>存储位置<ol>
+<li><code>/etc/gitconfig</code> 对所有用户都适用的配置</li>
+<li><code>~/.gitconfig</code>  对当前用户适用的配置</li>
+<li><code>.git/config</code> 对当前项目适用的配置</li>
+</ol>
+<hr>
+</li>
+<li>用户信息配置<ol>
+<li><code>git config --global user.name &quot;leven&quot;</code></li>
+<li><code>git config --global user.email levenhdu@163.com</code></li>
+<li><code>git config --list</code> 查看配置</li>
+<li><code>git config user.name</code> 查看指定配置信息</li>
+</ol>
+<hr>
+</li>
+<li>获取帮助<ul>
+<li><code>git help [command]</code> 可以通过该命令获取对应帮助信息</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="git操作"><a href="#git操作" class="headerlink" title="git操作"></a>git操作</h2><ul>
+<li>初始化仓库<ul>
+<li><code>git init</code> git初始化，会在当前目录生成.git目录</li>
+<li><code>git add</code>  将文件加入版本控制，索引文件（index files），也就是放入暂存区域(cached area)</li>
+<li><code>git clone (repority url) [localPath]</code> 从现有的仓库中克隆一份项目,最后可以指定存储位置</li>
+</ul>
+<hr>
+</li>
+<li>检查当前文件状态<ul>
+<li>文件状态生命周期<br><img src="http://cdn.htt.red/2.png" alt=""></li>
+<li><code>git status [-s 简略显示]</code>  查看当前所有文件状态</li>
+</ul>
+<hr>
+</li>
+<li><p>指定忽略文件</p>
+<ul>
+<li>所有空行或者以注释符号<code>＃</code>开头的行都会被 Git 忽略</li>
+<li>匹配模式最后跟反斜杠<code>（/）</code>说明要忽略的是目录</li>
+<li><p>要忽略指定模式以外的文件或目录，可以在模式前加上惊叹号（!）取反。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*.a  <span class="comment">#忽略所有.a结尾的文件</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a/   <span class="comment">#忽略a目录下所有文件</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!b.a <span class="comment">#b.a为例外</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+</li>
+<li>文件比较<ul>
+<li><code>git diff</code> 比较working tree和cached area的文件变更</li>
+<li><code>git diff --cached</code> 比较cached area与repository的文件变更</li>
+<li><code>git diff --head</code> 比较working tree和repository的文件变更</li>
+</ul>
+<hr>
+</li>
+<li><p>文件提交</p>
+<ul>
+<li><code>git commit [-m 增加提交内容备注|-a 将所有纳入版本控制的working tree文件加入暂存区并提交]</code></li>
+</ul>
+<hr>
+</li>
+<li>文件移除<ul>
+<li><code>git rm [-f 如果文件已放入暂存区，需要强制删除]</code></li>
+<li><code>git rm --cached</code> 如果不想删除 working tree的文件，只是从追踪文件中去除</li>
+<li><code>git rm \*log</code> 其中反斜杠+*表示递归删除,将递归删除目录下所有log结尾的文件</li>
+<li><code>git rm *log</code> 如果只想删除当前目录下，可使用该命令</li>
+</ul>
+<hr>
+</li>
+<li>文件恢复<ul>
+<li><code>git checkout -- file</code> 修改的区域是<strong>工作区</strong>,如果工作区有些不想要的修改，可以使用此命令，将暂存区的文件覆盖工作区</li>
+<li><code>git checkout HEAD file</code> 修改的区域是<strong>工作区</strong>,如果工作区有些不想要的修改，可以使用此命令，将仓库最新版本的文件覆盖工作区(从HEAD可想而知，也可以回退到之前的提交版本<code>git checkout [提交版本号] file</code>)</li>
+<li><code>git reset [HEAD 不填默认为最新版本] --file</code> 修改的区域是<strong>暂存区</strong>，如果暂存区有些不想要的修改，可以使用此命令，将仓库最新版本文件覆盖暂存区</li>
+<li><code>git commit --amend -m</code> 当提交了一个版本，发现少提交了一个文件，或想修改一下提交说明，可以在提交之后使用这一句</li>
+</ul>
+</li>
+<li>文件重命名<ul>
+<li><code>git mv</code> 文件重命名，相当于是 <code>1.mv a b</code> <code>2.git rm a</code> <code>3.git add b</code> 三个步骤</li>
+<li>在windows中git默认不区分大小写，如果直接修改文件大小写，可能识别不出，推荐使用git mv，或修改git config 使之区分大小写<code>git config core.ignorecase false</code></li>
+</ul>
+<hr>
+</li>
+<li><p>查看文件提交记录</p>
+<ul>
+<li><p><code>git log</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br><span class="line">   git <span class="built_in">log</span> -p 比较每个版本差异</span><br><span class="line">   git <span class="built_in">log</span> -2 查看最新的2条提交</span><br><span class="line">   git <span class="built_in">log</span> --<span class="built_in">stat</span> 查看提交摘要</span><br><span class="line">   git <span class="built_in">log</span> --gragh 图形化显示</span><br><span class="line">   git <span class="built_in">log</span> --pretty=oneline|full|short|format=<span class="string">"%h - %s"</span> 使用其他格式</span><br><span class="line">   git <span class="built_in">log</span> --pretty=format:<span class="string">"%h - %s"</span> --author=leven --since=<span class="string">"2008-10-01"</span> --before=<span class="string">"2008-11-01"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>格式参考<br><img src="http://cdn.htt.red/3.png" alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="远程仓库使用"><a href="#远程仓库使用" class="headerlink" title="远程仓库使用"></a>远程仓库使用</h2><blockquote>
+<p>远程仓库是放在网络上的项目仓库，一般公司中都会有自己独立的远程仓库用于代码管理</p>
+</blockquote>
+<ul>
+<li>远程仓库关联查看<ul>
+<li><code>git remote</code> 查看远程库的简短名字</li>
+<li><code>git remote -v</code> 查看对应的远程克隆位置</li>
+</ul>
+</li>
+<li><p>添加远程仓库关联</p>
+<ul>
+<li><code>git remote add [alias] [url]</code> 添加远程仓库绑定</li>
+</ul>
+</li>
+<li><p>拉取数据</p>
+<ul>
+<li><code>git fetch [alias]</code> 通过此命令，可以将拉下远程仓库的快照</li>
+<li>如果是<code>git clone</code>的方式获取的项目，默认origin为远程仓库的alias</li>
+<li><code>git pull [alias] [branch-name]</code>拉取远程分支内容,并merge本地文件</li>
+</ul>
+</li>
+<li>推送数据<ul>
+<li><code>git push [alias] [branch-name]</code> 推送数据至远程分支</li>
+</ul>
+</li>
+<li>查看远程仓库信息<ul>
+<li><code>git remote show [alias]</code> 查看远程仓库具体信息</li>
+</ul>
+</li>
+<li>远程仓库关联重命名<ul>
+<li><code>git remote rename aliasA aliasB</code> 远程仓库关联alias重命名</li>
+</ul>
+</li>
+<li>删除远程仓库关联<ul>
+<li><code>git remote rm alias</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><blockquote>
+<p>在发布某个版本的时候，记得要打上标签，这样利于之后项目盘点和回滚</p>
+</blockquote>
+<ul>
+<li>标签操作<ul>
+<li><code>git tag</code> 查看所有的tag</li>
+<li><code>git tag -l [regex]</code> 查看正则匹配的tag</li>
+<li><code>git tag -a [tag-name] -m &quot;description&quot;</code> 新增带批注说明的标签</li>
+<li><code>git show [tag-name]</code> 查看标签具体信息</li>
+<li><code>git tag -a [tag-name] [commit-no]</code>对历史提交版本打标签</li>
+<li>默认情况下git push 不会提交标签，通过<code>git push [alias] [tag-name]</code>提交指定标签,也可以通过<code>git push [alias] --tags</code>,将所有本地标签推送至远程</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h2><blockquote>
+<p>有时候为了少敲几个字符,可以使用别名</p>
+</blockquote>
+<ul>
+<li><code>git config --global alias.co checkout</code> 这样就可以使用git co 来代替checkout</li>
+</ul>
+<hr>
+<p><a href="http://git.oschina.net/progit/index.html" target="_blank" rel="noopener">文档参考</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2017/03/09/170309-designmodel/" data-toggle="tooltip" data-placement="top" title="设计模式-原则模式">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#git" title="git">git</a>
+                        
+                          <a class="tag" href="/tags/#cvs" title="cvs">cvs</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="https://blog.leven.xyz" target="_blank">leven Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "www-leven-xyz";
+    var disqus_identifier = "https://blog.leven.xyz/2017/01/19/170119-git-base/";
+    var disqus_url = "https://blog.leven.xyz/2017/01/19/170119-git-base/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://github.com/levenhdu">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; leven&#39;s Blog 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="91px" height="20px" src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("https://blog.leven.xyz/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '631394fe6cf50dde26d3b95f3047612c';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="https://blog.leven.xyz/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
